@@ -1,0 +1,4 @@
+Invoking command in '/mnt/c/ros2_ws/build/rake_umay_gazebo': /usr/bin/cmake /mnt/c/ros2_ws/src/rake_umay_gazebo -DCMAKE_INSTALL_PREFIX=/mnt/c/ros2_ws/install/rake_umay_gazebo
+Invoked command in '/mnt/c/ros2_ws/build/rake_umay_gazebo' returned '0': /usr/bin/cmake /mnt/c/ros2_ws/src/rake_umay_gazebo -DCMAKE_INSTALL_PREFIX=/mnt/c/ros2_ws/install/rake_umay_gazebo
+Invoking command in '/mnt/c/ros2_ws/build/rake_umay_gazebo': /usr/bin/cmake --build /mnt/c/ros2_ws/build/rake_umay_gazebo -- -j16 -l16
+Invoked command in '/mnt/c/ros2_ws/build/rake_umay_gazebo' returned '0': /usr/bin/cmake --build /mnt/c/ros2_ws/build/rake_umay_gazebo -- -j16 -l16

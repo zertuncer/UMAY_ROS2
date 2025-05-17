@@ -1,0 +1,26 @@
+-- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+-- Found ament_lint_auto: 0.12.12 (/opt/ros/humble/share/ament_lint_auto/cmake)
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/c/ros2_ws/build/rake_umay_description
+gmake[1]: Warning: File 'CMakeFiles/Makefile2' has modification time 0.99 s in the future
+gmake[1]: warning:  Clock skew detected.  Your build may be incomplete.
+-- Install configuration: ""
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/ament_index/resource_index/package_run_dependencies/rake_umay_description
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/ament_index/resource_index/parent_prefix_path/rake_umay_description
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/environment/ament_prefix_path.sh
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/environment/ament_prefix_path.dsv
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/environment/path.sh
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/environment/path.dsv
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/local_setup.bash
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/local_setup.sh
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/local_setup.zsh
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/local_setup.dsv
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/package.dsv
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/ament_index/resource_index/packages/rake_umay_description
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/cmake/rake_umay_descriptionConfig.cmake
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/cmake/rake_umay_descriptionConfig-version.cmake
+-- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/package.xml

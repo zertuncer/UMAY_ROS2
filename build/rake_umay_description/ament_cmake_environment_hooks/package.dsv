@@ -1,0 +1,4 @@
+source;share/rake_umay_description/local_setup.bash
+source;share/rake_umay_description/local_setup.dsv
+source;share/rake_umay_description/local_setup.sh
+source;share/rake_umay_description/local_setup.zsh

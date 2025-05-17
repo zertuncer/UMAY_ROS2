@@ -1,0 +1,340 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rake_umay">
+  
+  <xacro:arg name="use_nominal_extrinsics" default="false"/>
+
+  <xacro:property name="PI" value="3.14159265358979323"/>
+
+  <xacro:property name="chassis_link_width" value="0.428"/>
+  <xacro:property name="chassis_link_depth" value="1.302"/>
+  <xacro:property name="chassis_link_height" value="0.212"/>
+
+  <xacro:property name="wheel_link_mass" value="5"/>
+  <xacro:property name="wheel_link_radius" value="0.2"/>
+  <xacro:property name="wheel_link_length" value="0.083"/>
+  
+  <xacro:property name="wheel_base_x" value="0.550"/>
+  <xacro:property name="wheel_base_y" value="0.430"/>
+  <xacro:property name="wheel_base_z" value="-0.167"/>
+
+  <xacro:property name="laser_link_mass" value="0.5"/>
+  <xacro:property name="laser_link_radius" value="0.038"/>
+  <xacro:property name="laser_link_length" value="0.041"/>
+
+  <xacro:property name="camera_link_mass" value="0.5"/>
+  <xacro:property name="camera_link_depth" value="0.05"/>
+  <xacro:property name="camera_link_height" value="0.05"/>
+  <xacro:property name="camera_link_width" value="0.1" />
+
+  <xacro:property name="front_box_depth" value="0.2"/>
+  <xacro:property name="front_box_height" value="0.106"/>
+  <xacro:property name="front_box_width" value="0.215" />
+  <xacro:property name="front_box_mass" value="4.0"/>
+
+
+  <!--xacro:include filename="$(find rake_umay_description)/urdf/test_d455_camera.urdf.xacro" /-->
+
+  <link name="laser_link">
+    <visual>
+      <geometry>
+        <cylinder length="${laser_link_length}" radius="${laser_link_radius}"/> 
+      </geometry> 
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${laser_link_length}" radius="${laser_link_radius}"/> 
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="${laser_link_mass}"/>
+      <inertia ixx="${(1/12)*laser_link_mass*(3*laser_link_radius**2 + laser_link_length**2)}" ixy="0.0" ixz="0.0" iyy="${(1/12)*laser_link_mass*(3*laser_link_radius**2 + laser_link_length**2)}" iyz="0.0" izz="${(1/12)*laser_link_mass*(laser_link_radius**2)}"/>
+    </inertial>
+  </link>
+
+  <joint name="base_to_laser" type="fixed">
+    <parent link="base_link"/>
+    <child link="laser_link"/>
+    <origin xyz="${wheel_base_x} 0  ${chassis_link_height/2 + laser_link_length/2 + 0.1}" rpy="0.0 0.0 0.0"/>
+  </joint>
+
+<!-- UMAY'S SENSORS -->
+  <!--joint name="base_to_camera_bottom_screw_frame" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="0 ${chassis_link_depth/2 + platform_2_link_depth/2 + platform_1_link_depth} ${chassis_link_height/2}" rpy="0.0 0.0 0.0"/>
+  </joint-->
+  
+  <link name="imu_link"/>
+  
+  <joint name="base_to_imu" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+  </joint>
+  
+  
+  <link name="gps_link"/>
+  <joint name="base_to_gps" type="fixed">
+    <parent link="base_link"/>
+    <child link="gps_link"/>
+    <origin xyz="0.0 0.0 ${chassis_link_height}" rpy="0.0 0.0 0.0"/>
+  </joint>
+
+
+  <!-- <link name="front_camera_link"/>
+
+  <link name="front_operator_camera_link"/> -->
+  
+  <link name="front_box_link">
+    <visual>
+      <geometry>
+        <box size="${front_box_depth} ${front_box_width} ${front_box_height}"/>
+      </geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${front_box_depth} ${front_box_width} ${front_box_height}"/>
+      </geometry>
+    </collision>
+    <xacro:cuboid_inertial width="${front_box_width}" depth="${front_box_depth}" height="${front_box_height}" mass="${front_box_mass}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:cuboid_inertial>
+  </link>
+  
+  <!-- <link name="back_box_link">
+    <visual>
+      <geometry>
+        <box size="${front_box_depth} ${front_box_width} ${front_box_height}"/>
+      </geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${front_box_depth} ${front_box_width} ${front_box_height}"/>
+      </geometry>
+    </collision>
+    <xacro:cuboid_inertial width="${front_box_width}" depth="${front_box_depth}" height="${front_box_height}" mass="${front_box_mass}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:cuboid_inertial>
+  </link> -->
+
+  <joint name="base_front_box_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_box_link"/>
+    <origin xyz="${chassis_link_depth / 2 - front_box_depth / 2} 0 ${front_box_height / 2}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- <joint name="base_back_box_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="back_box_link"/>
+    <origin xyz="${-chassis_link_depth / 2 + front_box_depth / 2} 0 ${front_box_height / 2}" rpy="0 0 0"/>
+  </joint> -->
+
+  <link name="back_detection_camera_link">
+    <visual>
+      <geometry>
+        <box size="${camera_link_depth} ${camera_link_width} ${camera_link_height}"/>
+      </geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${camera_link_depth} ${camera_link_width} ${camera_link_height}"/>
+      </geometry>
+    </collision>
+    <xacro:cuboid_inertial width="${camera_link_width}" depth="${camera_link_depth}" height="${camera_link_height}" mass="${camera_link_mass}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:cuboid_inertial>
+  </link>
+
+  <joint name="base_back_detection_camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="back_detection_camera_link"/> 
+    <origin xyz="${-chassis_link_depth / 2  - camera_link_depth / 2} 0 ${-chassis_link_height / 2}" rpy="0 0 ${PI}"/>
+  </joint>
+  
+  
+  <link name="front_detection_camera_link">
+    <visual>
+      <geometry>
+        <box size="${camera_link_depth} ${camera_link_width} ${camera_link_height}"/>
+      </geometry>
+      <material name="silver"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${camera_link_depth} ${camera_link_width} ${camera_link_height}"/>
+      </geometry>
+    </collision>
+    <xacro:cuboid_inertial width="${camera_link_width}" depth="${camera_link_depth}" height="${camera_link_height}" mass="${camera_link_mass}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:cuboid_inertial>
+  </link>
+
+  <joint name="base_front_detection_camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_detection_camera_link"/> 
+    <origin xyz="${chassis_link_depth / 2 + camera_link_depth / 2} 0 ${front_box_height / 2}" rpy="0 0 0"/>
+  </joint>
+
+
+
+<!--Front Operator Camera-->
+<gazebo reference="front_detection_camera_link">
+  <sensor type="camera" name="front_detection_camera">
+    <update_rate>15.0</update_rate>
+    <camera name="front_detection_camera">
+      <horizontal_fov>1.3962634</horizontal_fov>
+      <image>
+        <width>800</width>
+        <height>800</height>
+        <format>R8G8B8</format>
+      </image>
+      <clip>
+        <near>0.02</near>
+        <far>300</far>
+      </clip>
+      <noise>
+        <type>gaussian</type>
+        <mean>0.0</mean>
+        <stddev>0.007</stddev>
+      </noise>
+    </camera>
+    <visualize>true</visualize>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>0.0</updateRate>
+      <cameraName>front_detection_camera</cameraName>
+      <imageTopicName>front_detection_camera_raw_image</imageTopicName>
+      <cameraInfoTopicName>front_detection_camera_info</cameraInfoTopicName>
+      <frameName>front_detection_camera_link</frameName>
+      <hackBaseline>0.07</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+    </plugin>
+  </sensor>
+</gazebo>
+
+<!-- Back Detection Camera -->
+<gazebo reference="back_detection_camera_link">
+  <sensor type="camera" name="back_detection_camera">
+    <update_rate>15.0</update_rate>
+    <camera name="back_detection_camera">
+      <horizontal_fov>1.3962634</horizontal_fov>
+      <image>
+        <width>800</width>
+        <height>800</height>
+        <format>R8G8B8</format>
+      </image>
+      <clip>
+        <near>0.02</near>
+        <far>300</far>
+      </clip>
+      <noise>
+        <type>gaussian</type>
+        <mean>0.0</mean>
+        <stddev>0.007</stddev>
+      </noise>
+    </camera>
+    <visualize>true</visualize>
+    <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+      <alwaysOn>true</alwaysOn>
+      <updateRate>0.0</updateRate>
+      <cameraName>back_detection_camera</cameraName>
+      <imageTopicName>back_detection_camera_raw_image</imageTopicName>
+      <cameraInfoTopicName>back_detection_camera_info</cameraInfoTopicName>
+      <frameName>back_detection_camera_link</frameName>
+      <hackBaseline>0.07</hackBaseline>
+      <distortionK1>0.0</distortionK1>
+      <distortionK2>0.0</distortionK2>
+      <distortionK3>0.0</distortionK3>
+      <distortionT1>0.0</distortionT1>
+      <distortionT2>0.0</distortionT2>
+    </plugin>
+  </sensor>
+</gazebo>
+
+
+<!-- LIDARs -->
+  <gazebo reference="laser_link">
+    <sensor type="ray" name="head_rplidar_sensor">
+      <pose>0 0 0.06 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>30</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>0.3</resolution>
+            <min_angle>-3.14159265</min_angle>
+            <max_angle>3.14159265</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.2</min>
+          <max>12.00</max>
+          <resolution>0.2</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_rplidar_controller" filename="libgazebo_ros_laser.so">
+        <topicName>scan</topicName>
+        <frameName>laser_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+  
+  <gazebo reference="imu_link">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>default_topic</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu/data</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
+  
+  <!-- GAZEBO GPS SENSOR PLUGIN -->
+  
+  <gazebo>
+    <plugin name="gazebo_ros_gps" filename="libhector_gazebo_ros_gps.so">
+      <updateRate>4.0</updateRate>
+      <bodyName>gps_link</bodyName>
+      <frameId>gps_link</frameId>
+      <topicName>gps/fix</topicName>
+      <velocityTopicName>/gps/fix_velocity</velocityTopicName>
+      <referenceLatitude>43.50089451</referenceLatitude>
+      <referenceLongitude>-80.54642133</referenceLongitude>
+      <referenceHeading>90</referenceHeading>
+      <referenceAltitude>10</referenceAltitude>
+      <offset>0 0 0</offset>
+      <drift>0.001 0.001 0.001</drift>
+      <gaussianNoise>0.05 0.05 0.05</gaussianNoise>
+      <velocityDrift>0.001 0.001 0.001</velocityDrift>
+      <velocityGaussianNoise>0.5 0.5 0.5</velocityGaussianNoise>
+    </plugin>
+  </gazebo> 
+
+
+
+</robot>
