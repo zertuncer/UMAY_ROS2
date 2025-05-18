@@ -1,2 +1,0 @@
-/mnt/c/ros2_ws/build/rake_umay_gazebo/CMakeFiles/edit_cache.dir
-/mnt/c/ros2_ws/build/rake_umay_gazebo/CMakeFiles/rebuild_cache.dir

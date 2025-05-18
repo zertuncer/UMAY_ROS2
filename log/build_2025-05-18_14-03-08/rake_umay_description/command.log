@@ -1,0 +1,4 @@
+Invoking command in '/mnt/c/ros2_ws/build/rake_umay_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy /usr/bin/cmake --build /mnt/c/ros2_ws/build/rake_umay_description -- -j16 -l16
+Invoked command in '/mnt/c/ros2_ws/build/rake_umay_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy /usr/bin/cmake --build /mnt/c/ros2_ws/build/rake_umay_description -- -j16 -l16
+Invoking command in '/mnt/c/ros2_ws/build/rake_umay_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy /usr/bin/cmake --install /mnt/c/ros2_ws/build/rake_umay_description
+Invoked command in '/mnt/c/ros2_ws/build/rake_umay_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy /usr/bin/cmake --install /mnt/c/ros2_ws/build/rake_umay_description

@@ -1,1 +1,1 @@
-joint_state_publisher:joint_state_publisher_gui:robot_state_publisher:rviz:xacro
+gazebo_ros:joint_state_publisher:joint_state_publisher_gui:robot_state_publisher:ros_gz_sim:rviz:rviz2:xacro

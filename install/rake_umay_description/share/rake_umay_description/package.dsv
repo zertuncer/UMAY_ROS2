@@ -1,8 +1,6 @@
-source;share/rake_umay_description/hook/cmake_prefix_path.ps1
 source;share/rake_umay_description/hook/cmake_prefix_path.dsv
 source;share/rake_umay_description/hook/cmake_prefix_path.sh
 source;share/rake_umay_description/local_setup.bash
 source;share/rake_umay_description/local_setup.dsv
-source;share/rake_umay_description/local_setup.ps1
 source;share/rake_umay_description/local_setup.sh
 source;share/rake_umay_description/local_setup.zsh

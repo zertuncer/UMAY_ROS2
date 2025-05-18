@@ -1,0 +1,17 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100
+    use_sim_time: true
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    my_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+my_position_controller:
+  ros__parameters:
+    joints:
+      - joint_1
+      - joint_2
+    interface_name: position

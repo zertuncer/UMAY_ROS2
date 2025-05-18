@@ -1,0 +1,38 @@
+[0.073s] Invoking command in '/mnt/c/ros2_ws/build/rake_umay_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy /usr/bin/cmake --build /mnt/c/ros2_ws/build/rake_umay_description -- -j16 -l16
+[0.192s] -- Found ament_cmake: 2.5.4 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.460s] -- Found ament_lint_auto: 0.17.2 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+[1.112s] -- Added test 'flake8' to check Python code syntax and style conventions
+[1.113s] -- Configured 'flake8' exclude dirs and/or files: 
+[1.204s] -- Added test 'lint_cmake' to check CMake code style
+[1.254s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[1.675s] -- Added test 'xmllint' to check XML markup files
+[1.725s] -- Configuring done (1.6s)
+[1.944s] -- Generating done (0.2s)
+[2.056s] -- Build files have been written to: /mnt/c/ros2_ws/build/rake_umay_description
+[2.079s] Invoked command in '/mnt/c/ros2_ws/build/rake_umay_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy /usr/bin/cmake --build /mnt/c/ros2_ws/build/rake_umay_description -- -j16 -l16
+[2.096s] Invoking command in '/mnt/c/ros2_ws/build/rake_umay_description': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy /usr/bin/cmake --install /mnt/c/ros2_ws/build/rake_umay_description
+[2.107s] -- Install configuration: ""
+[2.115s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/urdf
+[2.136s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/urdf/rake_umay_sensors.urdf.xacro
+[2.151s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/urdf/rake_umay_v2.urdf.xacro
+[2.164s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/launch
+[2.184s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/launch/display.launch.py
+[2.198s] -- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/launch/gazebo.launch.xml
+[2.253s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/config
+[2.272s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/config/controller.yaml
+[2.294s] -- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/ament_index/resource_index/package_run_dependencies/rake_umay_description
+[2.368s] -- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/ament_index/resource_index/parent_prefix_path/rake_umay_description
+[2.430s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/environment/ament_prefix_path.sh
+[2.446s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/environment/ament_prefix_path.dsv
+[2.457s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/environment/path.sh
+[2.472s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/environment/path.dsv
+[2.485s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/local_setup.bash
+[2.498s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/local_setup.sh
+[2.511s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/local_setup.zsh
+[2.523s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/local_setup.dsv
+[2.539s] -- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/package.dsv
+[2.590s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/ament_index/resource_index/packages/rake_umay_description
+[2.605s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/cmake/rake_umay_descriptionConfig.cmake
+[2.616s] -- Up-to-date: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/cmake/rake_umay_descriptionConfig-version.cmake
+[2.633s] -- Installing: /mnt/c/ros2_ws/install/rake_umay_description/share/rake_umay_description/package.xml
+[2.674s] Invoked command in '/mnt/c/ros2_ws/build/rake_umay_description' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy /usr/bin/cmake --install /mnt/c/ros2_ws/build/rake_umay_description

@@ -1,104 +1,140 @@
 import os
-import launch
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, TimerAction
-from launch.substitutions import Command, LaunchConfiguration
-from launch.conditions import IfCondition
-from launch.launch_description_sources import PythonLaunchDescriptionSource
+import xacro
+from pathlib import Path
+from ament_index_python.packages import get_package_share_directory
 
-import launch_ros
-from launch_ros.parameter_descriptions import ParameterValue
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
+from launch.actions import RegisterEventHandler, SetEnvironmentVariable
+from launch.event_handlers import OnProcessExit
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration, TextSubstitution
+from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description():
-    pkg_path = FindPackageShare(package='rake_umay_description').find('rake_umay_description')
-    gazebo_pkg = FindPackageShare(package='gazebo_ros').find('gazebo_ros')
+    # Launch Arguments (use project package)
+    use_sim_time = LaunchConfiguration('use_sim_time', default=True)
 
-    xacro_file = os.path.join(pkg_path, 'urdf', 'rake_umay_v2.urdf.xacro')
-    # process XACRO into URDF string (single string command)
-    robot_description = ParameterValue(
-        Command(['xacro ' + xacro_file]),
-        value_type=str
+    # Find project share directory
+    pkg_path = get_package_share_directory('rake_umay_description')
+    # (Optional sim path, using same package if separate sim package not available)
+    sim_pkg_path = pkg_path
+
+    # Set gazebo sim resource path
+    gazebo_resource_path = SetEnvironmentVariable(
+        name='GZ_SIM_RESOURCE_PATH',
+        value=[
+            os.path.join(sim_pkg_path, 'worlds'), ':' +
+            str(Path(pkg_path).parent.resolve())
+        ]
     )
-    params = {'robot_description': robot_description}
 
-    # Launch arguments for Gazebo verbosity and GUI
-    verbose_arg = LaunchConfiguration('verbose')
-    gui_arg = LaunchConfiguration('gui')
+    arguments = LaunchDescription([
+        DeclareLaunchArgument('world', default_value='empty',
+                              description='Simulation world name'),
+    ])
 
-    gazebo_launch = IncludeLaunchDescription(
+    gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(gazebo_pkg, 'launch', 'gazebo.launch.py')
+            os.path.join(get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')
         ),
         launch_arguments={
-            'verbose': verbose_arg,
-            'gui': gui_arg
+            'gz_args': [
+                LaunchConfiguration('world'),
+                TextSubstitution(text='.sdf -v 4 -r')
+            ]
         }.items()
     )
 
-    robot_state_publisher_node = launch_ros.actions.Node(
+    xacro_file = os.path.join(pkg_path,
+                              'urdf',
+                              'rake_umay_v2.urdf.xacro')
+
+    doc = xacro.process_file(xacro_file, mappings={'use_sim': 'true'})
+
+    robot_desc = doc.toprettyxml(indent='  ')
+
+    params = {'robot_description': robot_desc}
+    
+    node_robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
         parameters=[params]
     )
 
-    # Publish joint states so wheels are visible
-    joint_state_publisher_node = launch_ros.actions.Node(
-        package='joint_state_publisher',
-        executable='joint_state_publisher',
+    gz_spawn_entity = Node(
+        package='ros_gz_sim',
+        executable='create',
         output='screen',
-        parameters=[params]
-    )
-    joint_state_publisher_gui_node = launch_ros.actions.Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
-        output='screen',
-        parameters=[params],
-        condition=IfCondition(LaunchConfiguration('use_gui'))
+        arguments=['-string', robot_desc,
+                   '-x', '0.0',
+                   '-y', '0.0',
+                   '-z', '0.07',
+                   '-R', '0.0',
+                   '-P', '0.0',
+                   '-Y', '0.0',
+                   '-name', 'rake_umay',
+                   '-allow_renaming', 'false'],
     )
 
-    spawn_entity_node = launch_ros.actions.Node(
-        package='gazebo_ros',
-        executable='spawn_entity.py',
-        output='screen',
-        # spawn at 2.0m height
-        arguments=[
-            '-topic', 'robot_description',
-            '-entity', 'rake_umay',
-            '-z', '2.0'
-        ]
+    load_joint_state_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'joint_state_broadcaster'],
+        output='screen'
     )
 
-    # Delay spawning until Gazebo is ready to avoid service timeouts/crashes
-    delayed_spawn = TimerAction(
-        period=5.0,
-        actions=[spawn_entity_node]
+    load_forward_velocity_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'forward_velocity_controller'],
+        output='screen'
     )
 
-    return launch.LaunchDescription([
-        # Declare launch arguments
-        DeclareLaunchArgument(
-            'verbose',
-            default_value='true',
-            description='Enable gazebo verbose output'
+    load_forward_position_controller = ExecuteProcess(
+        cmd=['ros2', 'control', 'load_controller', '--set-state', 'active',
+             'forward_position_controller'],
+        output='screen'
+    )
+
+    # Bridge
+    bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/scan@sensor_msgs/msg/LaserScan@gz.msgs.LaserScan'],
+        output='screen'
+    )
+
+    rviz_config_file = os.path.join(pkg_path, 'config', 'rake_umay_config.rviz')
+
+    rviz = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        output="log",
+        arguments=["-d", rviz_config_file],
+    )
+
+    return LaunchDescription([
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=gz_spawn_entity,
+                on_exit=[load_joint_state_controller],
+            )
         ),
-        DeclareLaunchArgument(
-            'gui',
-            default_value='true',
-            description='Enable gazebo GUI client'
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+               target_action=load_joint_state_controller,
+               on_exit=[load_forward_velocity_controller,
+                        load_forward_position_controller],
+            )
         ),
-        DeclareLaunchArgument(
-            'use_gui',
-            default_value='true',
-            description='Enable joint_state_publisher GUI'
-        ),
-        gazebo_launch,
-        robot_state_publisher_node,
-        joint_state_publisher_node,
-        joint_state_publisher_gui_node,
-        delayed_spawn
+        gazebo_resource_path,
+        arguments,
+        gazebo,
+        node_robot_state_publisher,
+        gz_spawn_entity,
+        bridge,
+        rviz,
     ])
-
-if __name__ == '__main__':
-    generate_launch_description()

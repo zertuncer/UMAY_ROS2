@@ -41,7 +41,16 @@ def generate_launch_description():
         # artık argüman yok, işlenmiş URDF parametresini kullanacak
         condition=launch.conditions.IfCondition(LaunchConfiguration('use_gui'))
     )
-    
+
+    # Publish a static transform to lift the robot in RViz
+    static_tf_node = launch_ros.actions.Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_transform_publisher_rise',
+        output='screen',
+        arguments=['0', '0', '0.2', '0', '0', '0', 'world', 'base_link']
+    )
+
     rviz_node = launch_ros.actions.Node(
         package='rviz2',
         executable='rviz2',
@@ -59,6 +68,7 @@ def generate_launch_description():
         robot_state_publisher_node,
         joint_state_publisher_node,
         joint_state_publisher_gui_node,
+        static_tf_node,
         rviz_node
     ])
 
